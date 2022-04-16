@@ -118,9 +118,6 @@
 [submodule "bundle/cmp-vsnip"]
 	path = bundle/cmp-vsnip
 	url = https://github.com/hrsh7th/cmp-vsnip.git
-[submodule "bundle/gitsigns.nvim"]
-	path = bundle/gitsigns.nvim
-	url = https://github.com/lewis6991/gitsigns.nvim.git
 [submodule "bundle/vim-fugitive"]
 	path = bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git

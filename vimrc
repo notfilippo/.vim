@@ -407,10 +407,6 @@ au BufRead /tmp/mutt-* set textwidth=80
 
 " Go settings
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
-" autocmd BufEnter *.go colorscheme nofrils-dark
-
-" scala settings
-autocmd BufNewFile,BufReadPost *.scala setl shiftwidth=2 expandtab
 
 " lua settings
 autocmd BufNewFile,BufRead *.lua setlocal noet ts=4 sw=4 sts=4
@@ -579,8 +575,6 @@ require'nvim-tree'.setup{
   },
   -- Setting this to true breaks :GBrowse & vim-rhubarb.
   disable_netrw = false,
-  -- Close nvim-tree and vim on close file
-  auto_close = true,
   filters = {
     dotfiles = false,
     -- TODO: why doesn't this work
@@ -621,12 +615,7 @@ EOF
 endif
 
 " ================== vim-fugitive ====================
-" Suggest using pinentry-touchid since it is the least shit option:
-" https://github.com/jorgelbg/pinentry-touchid
 " This is used when unlocking a gpg key for signing or ssh key for commits.
-if !executable('pinentry-touchid')
-  echo "You might want to install pinentry-touchid: https://github.com/jorgelbg/pinentry-touchid"
-endif
 let g:which_key_map.g = { 'name' : '+git' }
 nnoremap <leader>ga :Git add %:p<CR><CR>
 let g:which_key_map.g.a = 'git add current file'
@@ -640,70 +629,6 @@ nnoremap <leader>gc :Git commit -sa<CR><CR>
 let g:which_key_map.g.c = 'git commit'
 nnoremap <leader>go :GBrowse<CR><CR>
 let g:which_key_map.g.o = 'open in GitHub'
-
-" ==================== gitsigns.nvim ====================
-if has('nvim')
-lua << EOF
-require("gitsigns").setup{
-  signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '+', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    topdelete    = {hl = 'GitSignsDelete', text = '_¯', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    changedelete = {hl = 'GitSignsChange', text = '~_', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-  },
-  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-  numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
-  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-  watch_gitdir = {
-    interval = 1000,
-    follow_files = true
-  },
-  attach_to_untracked = true,
-  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-  current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-    delay = 1000,
-    ignore_whitespace = false,
-  },
-  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
-  sign_priority = 6,
-  update_debounce = 100,
-  status_formatter = nil, -- Use default
-  max_file_length = 40000,
-  preview_config = {
-    -- Options passed to nvim_open_win
-    border = 'single',
-    style = 'minimal',
-    relative = 'cursor',
-    row = 0,
-    col = 1
-  },
-  yadm = {
-    enable = false
-  },
-  on_attach = function(bufnr)
-      local gs = package.loaded.gitsigns
-
-      local function map(mode, l, r, opts)
-        opts = opts or {}
-        opts.buffer = bufnr
-        vim.keymap.set(mode, l, r, opts)
-      end
-
-      map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
-      map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
-
-      map('n', '<leader>gb', function() gs.blame_line{full=true} end)
-      map('n', '<leader>tb', gs.toggle_current_line_blame)
-
-      map('n', '<leader>gd', gs.diffthis)
-  end
-}
-EOF
-endif
 
 " ==================== vim-go ====================
 let g:go_fmt_fail_silently = 0
